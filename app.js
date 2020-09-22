@@ -23,9 +23,12 @@ app.use(errorHandler);
 
 moment.tz.setDefault("Asia/Jakarta");
 
-// server.listen(PORT, () => {
-//   console.log(`Server is running on ${process.env.BASE_URL}:${PORT}`);
+// models.sequelize.sync({alter: true}).then(result => {
+//   server.listen(PORT, () => {
+//     console.log(`Server is running on ${PORT}`);
+//   });
+// }).catch(err => {
+//     console.log(err)
 // });
-
 
 module.exports = app;
