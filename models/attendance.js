@@ -92,8 +92,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: new Date().getTime()
     },
+    attendance_desc: DataTypes.STRING,
     geolocation: DataTypes.TEXT,
-    ipAddress: DataTypes.STRING
+    ipAddress: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Attendance',
