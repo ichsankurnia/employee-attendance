@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { Admin, Employee } = require('../models');
-require('dotenv').config()
+require('dotenv').config()                                 // Development
 
 async function isAdminAuthenticated (req, res, next) {
   try {
