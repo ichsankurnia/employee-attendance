@@ -83,10 +83,17 @@ class EmployeeController  {
   static async getEmployees(req, res, next) {
     try {
       const employee = await Employee.findAll({
-        attributes: ['id', 'nik', 'position', 'username', 'shiftId', 'createdAt', 'updatedAt'],
         order: [
           ['id', 'ASC']
-        ]
+        ],
+        attributes : ["id","nik", "name", "position", "username", "shiftId"],
+            include: [
+              {
+                model : Shift,
+                as: "shifts",
+                attributes : ["shift_name","shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
+              },
+            ]
       });
 
       return res.status(200).json(employee);
@@ -175,6 +182,7 @@ class EmployeeController  {
     }
   }
 
+
   static async updateShiftEmployee(req, res, next) {
     try {
       const { id } = req.params
@@ -223,6 +231,43 @@ class EmployeeController  {
       return next(error);
     }
   }
+
+  static async updateShiftMultipleEmployees(req, res, next) {
+    try {
+      const { shift_id, list_employees } = req.body
+      
+      if(list_employees.length > 0){
+
+        await Promise.all(list_employees.map(async (element) => {
+          await Employee.update({shiftId: shift_id}, {where : {id: element.employee_id}})
+        }))
+
+        const data = await Employee.findAll(
+          {
+            attributes : ["id","nik", "name", "position", "username", "shiftId"],
+            include: [
+              {
+                model : Shift,
+                as: "shifts",
+                attributes : ["shift_name","shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
+              },
+            ]
+          })
+        return res.status(200).json({code: 0, message: 'Multiple employee Shift has updated successfully', data: data });
+
+      } else {
+        return next({
+          status: 404,
+          name: 'NotFound',
+          message: 'Employee not found'
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      return next(error);
+    }
+  }
+
 }
 
 module.exports = EmployeeController;
