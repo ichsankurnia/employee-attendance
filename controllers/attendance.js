@@ -62,7 +62,7 @@ class AttendanceController  {
           if(currTime.isBefore(minCheckOut)){
             code = 3; message = "You're too early to Check Out"
           }else if (currTime.isAfter(maxCheckOut)){
-            code = 4; message = "You are late to Check In"
+            code = 4; message = "You are late to Check Out"
           }else{
             code = 0; message = "Success Check Out"
           }
