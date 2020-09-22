@@ -4,7 +4,7 @@ if (process.env.NODE_ENV === 'development') {
 
 const express = require('express');
 const cors = require('cors');
-const moment = require('moment-timezone');
+const moment = require('moment');
 const app = express();
 const routes = require('./routes');
 const { errorHandler } = require('./middlewares');
