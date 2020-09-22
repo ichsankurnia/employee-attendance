@@ -13,6 +13,10 @@ function getTIme(date) {
   return strTime;
 }
 
+const getAMorPM = (date) => {
+  return date.substring(date.length - 2, date.length)
+}
+
 class AttendanceController  {
   static async addAttendance(req, res, next) {
     try {
@@ -44,30 +48,49 @@ class AttendanceController  {
         const minCheckOut = moment(dataShift.dataValues.min_check_out, "HH:mm A")
         const maxCheckOut = moment(dataShift.dataValues.max_check_out, "HH:mm A")
   
-        if(minCheckIn.isAfter(maxCheckIn)) maxCheckIn.add(1, 'days')
-        if(minCheckOut.isAfter(maxCheckOut)) maxCheckOut.add(1, 'days')
-  
-  
-        let code = 0, message = ""
-  
-        if(input.status.toLowerCase() === "check_in" || input.status.toLowerCase() === "check in"){
-          if(currTime.isBefore(minCheckIn)) {
-            code = 1; message = "You're too early to Check In"
-          }else if(currTime.isAfter(maxCheckIn)){
-            code = 2; message = "You are late to Check In"
-          }else{
-            code = 0; message = "Success Check In"
+        if(input.status.toLowerCase() === "check_in" || input.status.toLowerCase() === "check in" || input.status.toLowerCase() === "check-in"){
+          if(minCheckIn.isAfter(maxCheckIn)){
+            maxCheckIn.add(1, 'days')
+            if(getAMorPM(getTIme(dateNow)).toLowerCase() === "am"){
+                if(currTime.isBefore(minCheckIn) && currTime.isBefore(maxCheckIn)){
+                    currTime.add(1, 'days')
+                }
+            }
           }
         }else{
-          if(currTime.isBefore(minCheckOut)){
-            code = 3; message = "You're too early to Check Out"
-          }else if (currTime.isAfter(maxCheckOut)){
-            code = 4; message = "You are late to Check Out"
-          }else{
-            code = 0; message = "Success Check Out"
+          if(minCheckOut.isAfter(maxCheckOut)){
+            maxCheckOut.add(1, 'days')
+            if(getAMorPM(getTIme(dateNow)).toLowerCase() === "am"){
+                if(currTime.isBefore(minCheckOut) && currTime.isBefore(maxCheckOut)){
+                    currTime.add(1, 'days')
+                }
+            }
           }
         }
   
+  
+        let code = 0, message = "", desc = ""
+  
+        if(input.status.toLowerCase() === "check_in" || input.status.toLowerCase() === "check in" || input.status.toLowerCase() === "check-in"){
+          if(currTime.isBefore(minCheckIn)) {
+            code = 1; message = "You're too early to Check In"; desc = "Too Early Check-In"
+          }else if(currTime.isAfter(maxCheckIn)){
+            code = 2; message = "You are late to Check In"; desc = "Late Check-In"
+          }else{
+            code = 0; message = "Success Check In"; desc = "Success Check-In"
+          }
+        }else{
+          if(currTime.isBefore(minCheckOut)){
+            code = 3; message = "You're too early to Check Out"; desc = "Too Early Check-Out"
+          }else if (currTime.isAfter(maxCheckOut)){
+            code = 4; message = "You are late to Check Out"; desc = "Late Check-Out"
+          }else{
+            code = 0; message = "Success Check Out"; desc = "Success Check-Out"
+          }
+        }
+  
+        input.attendance_desc = desc
+
         const attendance = await Attendance.create(input);
   
         return res.status(201).json({code: code, message: message, data: attendance});
