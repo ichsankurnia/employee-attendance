@@ -3,11 +3,13 @@ const { EmployeeController } = require('../controllers');
 const { isAdminAuthenticated } = require('../middlewares/auth');
 
 router.post('/login', EmployeeController.login);
-router.post('/', EmployeeController.addEmployee);
-router.get('/', EmployeeController.getEmployees);
-router.get('/:id', EmployeeController.findOneEmployee);
-router.patch('/:id', isAdminAuthenticated, EmployeeController.editEmployee);
+router.post('/', isAdminAuthenticated, EmployeeController.addEmployee);
+router.get('/', isAdminAuthenticated, EmployeeController.getEmployees);
+router.get('/:id', isAdminAuthenticated, EmployeeController.findOneEmployee);
+router.put('/:id', isAdminAuthenticated, isAdminAuthenticated, EmployeeController.editEmployee);
 router.delete('/:id', isAdminAuthenticated, EmployeeController.deleteEmployee);
-router.post('/shift/:id', EmployeeController.updateShiftEmployee);
+
+router.put('/shift/:id', isAdminAuthenticated, EmployeeController.updateShiftEmployee);
+router.post('/shift', isAdminAuthenticated, EmployeeController.updateShiftMultipleEmployees);
 
 module.exports = router;
