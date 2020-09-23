@@ -27,8 +27,10 @@ class EmployeeController  {
           const access_token = JWTHelper.signToken(payload);
 
           return res.status(200).json({
+            code: 0,
+            message: 'Login success',
             access_token,
-            message: 'Login success'
+            data: employee
           });
         } else {
           return next({
