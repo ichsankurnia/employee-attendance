@@ -13,6 +13,27 @@ const createNewShift = async (req, res) => {
     }
 }
 
+
+const insertManyShift = async (req, res) => {
+    try {
+        const { list_shift } = req.body
+        
+        if(list_shift.length > 0){
+            await Promise.all(list_shift.map(async (element) => {
+                await Shift.create(element)
+            }))
+
+            const data = await Shift.findAll()
+            return res.status(201).json({code: 0, message: 'insert many shift has updated successfully', data: data });
+        }else{
+            return res.status(400).json({code: 1, message: "no shift inserted"})
+        }
+    } catch (error) {
+        return res.status(500).json({code: 1, message: error.message, data: null})
+    }
+}
+
+
 const getAllShift = async (req, res) => {
     try {
         const data = await Shift.findAll({order: [
@@ -88,6 +109,7 @@ const truncateShift = async (req, res) => {
 
 module.exports = {
     createNewShift,
+    insertManyShift,
     getAllShift,
     updateShift,
     deleteShift,
