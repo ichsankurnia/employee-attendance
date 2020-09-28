@@ -1,4 +1,4 @@
-const { Attendance, Shift, Employee } = require('../models');
+const { Attendance, Shift, Employee, Schedule } = require('../models');
 const moment = require('moment')
 
 
@@ -22,6 +22,7 @@ class AttendanceController  {
     try {
 
       const dateNow = new Date()
+      const today = moment(dateNow).format("DD-MMM-YYYY")
       
       const input = {
         employeeId: req.body.employee_id,
@@ -33,7 +34,12 @@ class AttendanceController  {
         timestamp: dateNow.getTime()
       }
 
-      const employeeShift = await Employee.findOne({where: {id : input.employeeId} })
+      const employeeShift = await Schedule.findOne({
+          where: { 
+            employeeId : input.employeeId,
+            date: today
+          } 
+        })
 
       console.log(employeeShift)
 
@@ -118,7 +124,7 @@ class AttendanceController  {
           {
             model : Employee,
             as: "employees",
-            attributes : ["nik", "position", "username", "shiftId"],
+            attributes : ["nik", "name", "position", "shiftId"],
             include: [
               {
                 model : Shift,
