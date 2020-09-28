@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   class Shift extends Model {
     static associate(models) {
       Shift.hasMany(models.Attendance, { foreignKey: 'id', as: 'attendances' });
-      Shift.hasMany(models.Employee, { foreignKey: 'id', as: 'employees' });
+      Shift.hasMany(models.Schedule, { foreignKey: 'id', as: 'schedules' });
     }
   };
   Shift.init({

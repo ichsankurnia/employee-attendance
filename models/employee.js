@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   class Employee extends Model {
     static associate(models) {
       Employee.hasMany(models.Attendance, { foreignKey: 'id', as: 'attendances' });
-      Employee.belongsTo(models.Shift, { foreignKey: 'shiftId', as: 'shifts' });
+      Employee.hasMany(models.Schedule, { foreignKey: 'id', as: 'schedules' });
     }
   };
   Employee.init({
@@ -76,10 +76,6 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    shiftId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    }
   }, {
     sequelize,
     modelName: 'Employee',
