@@ -1,4 +1,4 @@
-const { Employee, Shift } = require('../models');
+const { Employee, Shift, Schedule } = require('../models');
 const { BcryptHelper, JWTHelper } = require('../helpers');
 
 class EmployeeController  {
@@ -60,8 +60,7 @@ class EmployeeController  {
         name: req.body.name,
         position: req.body.position,
         username: req.body.username,
-        password: req.body.password,
-        shiftId: 1
+        password: req.body.password
       }
 
       const employee = await Employee.create(input);
@@ -71,7 +70,6 @@ class EmployeeController  {
         nik: employee.nik,
         position: employee.position,
         username: employee.username,
-        shiftId: 1,
         createdAt: employee.createdAt,
         updatedAt: employee.updatedAt
       }
@@ -88,14 +86,7 @@ class EmployeeController  {
         order: [
           ['id', 'ASC']
         ],
-        attributes : ["id","nik", "name", "position", "username", "shiftId"],
-            include: [
-              {
-                model : Shift,
-                as: "shifts",
-                attributes : ["shift_name","shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
-              },
-            ]
+        attributes : ["id","nik", "name", "position", "username"]
       });
 
       return res.status(200).json(employee);
