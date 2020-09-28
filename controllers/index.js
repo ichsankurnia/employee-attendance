@@ -1,6 +1,6 @@
-const AdminController = require('./admin');
-const EmployeeController = require('./employee');
-const AttendanceController = require('./attendance');
+const AdminController = require('./controller-admin');
+const EmployeeController = require('./controller-employee');
+const AttendanceController = require('./controller-attendance');
 
 module.exports = {
   AdminController,

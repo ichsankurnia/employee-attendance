@@ -1,14 +1,14 @@
 const router = require('express').Router();
-const adminRoutes = require('./admin');
-const employeeRoutes = require('./employee');
-const attendanceRoutes = require('./attendance');
+const adminRoutes = require('./route-admin');
+const employeeRoutes = require('./route-employee');
+const attendanceRoutes = require('./route-attendance');
 const fs = require('fs');
 const multer = require('multer');
 const csv = require('csv');
 const upload = multer({ dest: 'tmp/csv/' });
 const { Employee } = require('../models');
 
-const controllerShift = require('../controllers/shift')
+const controllerShift = require('../controllers/controller-shift')
 const { isAdminAuthenticated } = require('../middlewares/auth');
 
 
