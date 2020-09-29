@@ -9,6 +9,7 @@ const upload = multer({ dest: 'tmp/csv/' });
 const { Employee } = require('../models');
 
 const controllerShift = require('../controllers/controller-shift')
+const controllerSchedule = require('../controllers/controller-schedule')
 const { isAdminAuthenticated } = require('../middlewares/auth');
 
 
@@ -55,8 +56,17 @@ router.use('/attendances', attendanceRoutes);
 
 router.get('/shift/sync', isAdminAuthenticated, controllerShift.getAllShift)
 router.post('/shift/new', isAdminAuthenticated, controllerShift.createNewShift)
+router.post('/shift/insert-many', isAdminAuthenticated, controllerShift.insertManyShift)
 router.put('/shift/modify/:id', isAdminAuthenticated, controllerShift.updateShift)
 router.delete('/shift/remove/:id', isAdminAuthenticated, controllerShift.deleteShift)
 router.delete('/shift/truncate', isAdminAuthenticated, controllerShift.truncateShift)
+
+router.get('/schedule/sync-all', controllerSchedule.getAllSchedule)
+router.get('/schedule/sync-all/:employee_id', controllerSchedule.getAllSchedulebyEmployeId)
+router.get('/schedule/sync-today', controllerSchedule.getAllScheduleToday)
+router.get('/schedule/sync-today/:employee_id', controllerSchedule.getScheduleEmployeIdAndToday)
+router.get('/schedule/sync-date/:date', controllerSchedule.getAllScheduleByDate)
+router.get('/schedule/sync-date/:date/:employee_id', controllerSchedule.getScheduleEmployeIdAndDate)
+router.post('/schedule/new', controllerSchedule.addSchedule)
 
 module.exports = router;
