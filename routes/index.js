@@ -69,4 +69,6 @@ router.get('/schedule/sync-date/:date', isAdminAuthenticated, controllerSchedule
 router.get('/schedule/sync-date/:date/:employee_id', isAdminAuthenticated, controllerSchedule.getScheduleEmployeIdAndDate)
 router.post('/schedule/new', isAdminAuthenticated, controllerSchedule.addSchedule)
 
+router.put('/schedule/modify/:date', isAdminAuthenticated, controllerSchedule.updateScheduleEmployeeByDate);
+
 module.exports = router;

@@ -20,7 +20,11 @@ const addSchedule = async (req, res) => {
 
 const getAllSchedule = async (req, res) => {
     try {
-        const data = await Schedule.findAll()
+        const data = await Schedule.findAll({
+            order: [
+                ['date', 'DESC']
+            ],
+        })
 
         if(data.length > 0){
             return res.status(200).json({code: 0, message: "success get all data", data: data})
@@ -48,6 +52,9 @@ const getAllScheduleToday = async (req, res) => {
                 ]
             },
             attributes: ['employeeId', 'shiftId', 'date'],
+            order: [
+                ['date', 'DESC']
+            ],
             include: [
                 {
                     model: Employee,
@@ -80,6 +87,9 @@ const getAllSchedulebyEmployeId = async (req, res) => {
         const data = await Schedule.findAll({
             where : { employeeId: employee_id },
             attributes: ['employeeId', 'shiftId', 'date'],
+            order: [
+                ['date', 'DESC']
+            ],
             include: [
                 {
                     model: Employee,
@@ -157,6 +167,9 @@ const getAllScheduleByDate = async (req, res) => {
                 date: date
             },
             attributes: ['employeeId', 'shiftId', 'date'],
+            order: [
+                ['date', 'DESC']
+            ],
             include: [
                 {
                     model: Employee,
@@ -216,6 +229,39 @@ const getScheduleEmployeIdAndDate = async (req, res) => {
     }
 }
 
+const updateScheduleEmployeeByDate = async (req, res) => {
+    try {
+        const { date } = req.params
+
+        const findSchedule = await Schedule.findOne({
+            where: { 
+                date : date, 
+                employeeId: req.body.employeeId
+            }
+        })
+
+        if(findSchedule){
+            const updateSchedule = await Schedule.update(req.body, {where: {date: date}})
+
+            if(updateSchedule){
+                const data = await Schedule.findOne({
+                    where: { 
+                        date : date, 
+                        employeeId: req.body.employeeId
+                    }
+                })
+
+                return res.status(202).json({code: 0, message: `success update schedule with employeeId ${req.body.employeeId} and date at ${date}`, data: data})
+            }else{
+                return res.status(500).json({code: 1, message: `fail update schedule with employeeId ${req.body.employeeId} and date at ${date}`, data: null})
+            }
+        }else{
+            return res.status(400).json({code: 1, message: `schedule with employeeId ${req.body.employeeId} and date at ${date} doesn't exist`, data: null})
+        }
+    } catch (error) {
+        return res.status(400).json({code: 1, message: error.message, data: null})
+    }
+}
 
 module.exports = {
     addSchedule,
@@ -225,4 +271,5 @@ module.exports = {
     getScheduleEmployeIdAndToday,
     getAllScheduleByDate,
     getScheduleEmployeIdAndDate,
+    updateScheduleEmployeeByDate
 }
