@@ -61,12 +61,12 @@ router.put('/shift/modify/:id', isAdminAuthenticated, controllerShift.updateShif
 router.delete('/shift/remove/:id', isAdminAuthenticated, controllerShift.deleteShift)
 router.delete('/shift/truncate', isAdminAuthenticated, controllerShift.truncateShift)
 
-router.get('/schedule/sync-all', controllerSchedule.getAllSchedule)
-router.get('/schedule/sync-all/:employee_id', controllerSchedule.getAllSchedulebyEmployeId)
-router.get('/schedule/sync-today', controllerSchedule.getAllScheduleToday)
-router.get('/schedule/sync-today/:employee_id', controllerSchedule.getScheduleEmployeIdAndToday)
-router.get('/schedule/sync-date/:date', controllerSchedule.getAllScheduleByDate)
-router.get('/schedule/sync-date/:date/:employee_id', controllerSchedule.getScheduleEmployeIdAndDate)
-router.post('/schedule/new', controllerSchedule.addSchedule)
+router.get('/schedule/sync-all', isAdminAuthenticated, controllerSchedule.getAllSchedule)
+router.get('/schedule/sync-all/:employee_id', isAdminAuthenticated, controllerSchedule.getAllSchedulebyEmployeId)
+router.get('/schedule/sync-today', isAdminAuthenticated, controllerSchedule.getAllScheduleToday)
+router.get('/schedule/sync-today/:employee_id', isAdminAuthenticated, controllerSchedule.getScheduleEmployeIdAndToday)
+router.get('/schedule/sync-date/:date', isAdminAuthenticated, controllerSchedule.getAllScheduleByDate)
+router.get('/schedule/sync-date/:date/:employee_id', isAdminAuthenticated, controllerSchedule.getScheduleEmployeIdAndDate)
+router.post('/schedule/new', isAdminAuthenticated, controllerSchedule.addSchedule)
 
 module.exports = router;
