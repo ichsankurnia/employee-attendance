@@ -9,7 +9,7 @@ router.get('/:id', isAdminAuthenticated, EmployeeController.findOneEmployee);
 router.put('/:id', isAdminAuthenticated, isAdminAuthenticated, EmployeeController.editEmployee);
 router.delete('/:id', isAdminAuthenticated, EmployeeController.deleteEmployee);
 
-router.put('/shift/:id', isAdminAuthenticated, EmployeeController.updateShiftEmployee);
-router.post('/shift', isAdminAuthenticated, EmployeeController.updateShiftMultipleEmployees);
+// router.put('/shift/:id', isAdminAuthenticated, EmployeeController.updateShiftEmployee);
+// router.post('/shift', isAdminAuthenticated, EmployeeController.updateShiftMultipleEmployees);
 
 module.exports = router;
