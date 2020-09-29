@@ -74,6 +74,24 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    day: {
+      type: DataTypes.STRING,
+      defaultValue: ""
+    },
+    date: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          args: true,
+          msg: 'Date is required'
+        },
+        notEmpty: {
+          args: true,
+          msg: 'Date is required'
+        }
+      }
+    },
     time: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -92,9 +110,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: new Date().getTime()
     },
-    attendance_desc: DataTypes.STRING,
     geolocation: DataTypes.TEXT,
     ipAddress: DataTypes.STRING,
+    attendance_desc: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Attendance',
