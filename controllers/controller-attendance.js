@@ -127,7 +127,7 @@ class AttendanceController  {
     try {
       const attendance = await Attendance.findAll({
         order: [
-          ['id', 'DESC']
+          ['timestamp', 'DESC']
         ],
         attributes : ["id","type", "status", "day", "date", "time", "timestamp", "geolocation", "ipAddress", "employeeId"],
         include: [
@@ -193,7 +193,7 @@ class AttendanceController  {
           date: moment(new Date()).format("DD-MMM-YYYY")
         },
         order: [
-          ['id', 'DESC']
+          ['timestamp', 'DESC']
         ],
         attributes : ["id","type", "status","day", "date", "time", "timestamp", "geolocation", "ipAddress", "employeeId", 'shiftId'],
         include: [
@@ -232,7 +232,7 @@ class AttendanceController  {
           date: date
         },
         order: [
-          ['id', 'DESC']
+          ['timestamp', 'DESC']
         ],
         attributes : ["id","type", "status", "day", "date", "time", "timestamp", "geolocation", "ipAddress", "employeeId", 'shiftId'],
         include: [
