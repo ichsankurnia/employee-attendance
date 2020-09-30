@@ -125,24 +125,50 @@ class AttendanceController  {
 
   static async getAttendances(req, res, next) {
     try {
-      const attendance = await Attendance.findAll({
-        order: [
-          ['timestamp', 'DESC']
-        ],
-        attributes : ["id","type", "status", "day", "date", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId"],
-        include: [
-          {
-            model : Employee,
-            as: "employees",
-            attributes : ["nik", "name", "position"],
-          },
-          {
-            model : Shift,
-            as: "shifts",
-            attributes : ["shift_name", "shift_desc"],
-          },
-        ],
-      });
+      let { filter } = req.query;
+      let paramQuerySQL = {};
+
+      paramQuerySQL.attributes = ["id","type", "status", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId",  'shiftId']
+
+      paramQuerySQL.include = [
+        {
+          model : Employee,
+          as: "employees",
+          attributes : ["nik", "name", "position", "username", "shiftId"],
+          include: [
+            {
+              model : Shift,
+              as: "shifts",
+              attributes : ["shift_name", "shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
+            },
+          ]
+        },
+      ]
+
+      paramQuerySQL.order = [
+        ['timestamp', 'DESC']
+      ]
+
+      if (filter != '' && typeof filter !== 'undefined') {
+        let query = filter.split(',');
+        query.forEach(item => {
+          if (item === 'check-in') {
+            paramQuerySQL.where = {
+              status: {
+                [Op.iLike]: 'check_in'
+              }
+            }
+          } else if (item === 'check-out') {
+            paramQuerySQL.where = {
+              status: {
+                [Op.iLike]: 'check_out'
+              }
+            }
+          }
+        });
+      }
+      
+      const attendance = await Attendance.findAll(paramQuerySQL);
 
       return res.status(200).json(attendance);
     } catch (err) {
@@ -188,27 +214,61 @@ class AttendanceController  {
 
   static async getAttendanceToday(req, res, next){
     try {
-      const attendance = await Attendance.findAll({
-        where: {
-          date: moment(new Date()).format("DD-MMM-YYYY")
+      const { filter } = req.query;
+      let paramQuerySQL = {};
+
+      paramQuerySQL.where = {
+        time: {
+          [Op.substring]: moment(dateNow).format("DD-MM-YYYY")
+        }
+      }
+
+      paramQuerySQL.attributes = ["id","type", "status", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId']
+
+      paramQuerySQL.include = [
+        {
+          model : Employee,
+          as: "employees",
+          attributes : ["nik", "name", "position", "username", "shiftId"],
+          include: [
+            {
+              model : Shift,
+              as: "shifts",
+              attributes : ["shift_name", "shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
+            },
+          ]
         },
-        order: [
-          ['timestamp', 'DESC']
-        ],
-        attributes : ["id","type", "status","day", "date", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId'],
-        include: [
-          {
-            model : Employee,
-            as: "employees",
-            attributes : ["nik", "name", "position"],
-          },
-          {
-            model : Shift,
-            as: "shifts",
-            attributes : ["shift_name", "shift_desc"],
-          },
-        ]
-      });
+      ]
+
+      paramQuerySQL.order = [
+        ['timestamp', 'DESC']
+      ]
+
+      if (filter != '' && typeof filter !== 'undefined') {
+        let query = filter.split(',');
+        query.forEach(item => {
+          if (item === 'check-in') {
+            paramQuerySQL.where = {
+              date: {
+                [Op.iLike]: moment(new Date()).format("DD-MMM-YYYY")
+              },
+              status: {
+                [Op.iLike]: 'check_in'
+              }
+            }
+          } else if (item === 'check-out') {
+            paramQuerySQL.where = {
+              date: {
+                [Op.iLike]: moment(new Date()).format("DD-MMM-YYYY")
+              },
+              status: {
+                [Op.iLike]: 'check_out'
+              }
+            }
+          }
+        });
+      }
+      const attendance = await Attendance.findAll(paramQuerySQL);
 
       if(attendance.length > 0){
         return res.status(200).json({code: 0, status: "success", data: attendance})        
@@ -227,27 +287,61 @@ class AttendanceController  {
   static async getAttendanceByDate(req, res, next){
     try {
       const { date } = req.params
-      const attendance = await Attendance.findAll({
-        where: {
-          date: date
+      const { filter } = req.query;
+      let paramQuerySQL = {};
+
+      paramQuerySQL.where = {
+        time: {
+          [Op.substring]: moment(dateNow).format("DD-MM-YYYY")
+        }
+      }
+
+      paramQuerySQL.attributes = ["id","type", "status", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId']
+
+      paramQuerySQL.include = [
+        {
+          model : Employee,
+          as: "employees",
+          attributes : ["nik", "name", "position", "username", "shiftId"],
+          include: [
+            {
+              model : Shift,
+              as: "shifts",
+              attributes : ["shift_name", "shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
+            },
+          ]
         },
-        order: [
-          ['timestamp', 'DESC']
-        ],
-        attributes : ["id","type", "status", "day", "date", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId'],
-        include: [
-          {
-            model : Employee,
-            as: "employees",
-            attributes : ["nik", "name", "position"],
-          },
-          {
-            model : Shift,
-            as: "shifts",
-            attributes : ["shift_name", "shift_desc"],
-          },
-        ]
-      });
+      ]
+
+      paramQuerySQL.order = [
+        ['timestamp', 'DESC']
+      ]
+
+      if (filter != '' && typeof filter !== 'undefined') {
+        let query = filter.split(',');
+        query.forEach(item => {
+          if (item === 'check-in') {
+            paramQuerySQL.where = {
+              date: {
+                [Op.iLike]: date
+              },
+              status: {
+                [Op.iLike]: 'check_in'
+              }
+            }
+          } else if (item === 'check-out') {
+            paramQuerySQL.where = {
+              date: {
+                [Op.iLike]: date
+              },
+              status: {
+                [Op.iLike]: 'check_out'
+              }
+            }
+          }
+        });
+      }
+      const attendance = await Attendance.findAll(paramQuerySQL);
 
       if(attendance.length > 0){
         return res.status(200).json({code: 0, status: "success", data: attendance})        
