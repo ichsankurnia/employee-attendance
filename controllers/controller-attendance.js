@@ -167,7 +167,15 @@ class AttendanceController  {
       
       const attendance = await Attendance.findAll(paramQuerySQL);
 
-      return res.status(200).json(attendance);
+      if(attendance.length > 0){
+        return res.status(200).json({code: 0, status: "success", data: attendance})        
+      }else{
+        return next({
+          status: 404,
+          name: 'NotFound',
+          message: 'Attendance not found'
+        });
+      }
     } catch (err) {
       return next(err);
     }
@@ -215,9 +223,7 @@ class AttendanceController  {
       let paramQuerySQL = {};
 
       paramQuerySQL.where = {
-        time: {
-          [Op.substring]: moment(new Date()).format("DD-MM-YYYY")
-        }
+        date: moment(new Date()).format("DD-MMM-YYYY")
       }
 
       paramQuerySQL.attributes = ["id","type", "status", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId']
@@ -286,9 +292,7 @@ class AttendanceController  {
       let paramQuerySQL = {};
 
       paramQuerySQL.where = {
-        time: {
-          [Op.substring]: moment(new Date()).format("DD-MM-YYYY")
-        }
+        date: date
       }
 
       paramQuerySQL.attributes = ["id","type", "status", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId']
