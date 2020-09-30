@@ -129,7 +129,7 @@ class AttendanceController  {
         order: [
           ['timestamp', 'DESC']
         ],
-        attributes : ["id","type", "status", "day", "date", "time", "timestamp", "geolocation", "ipAddress", "employeeId"],
+        attributes : ["id","type", "status", "day", "date", "time", "timestamp", "attendance_desc", "geolocation", "ipAddress", "employeeId"],
         include: [
           {
             model : Employee,
@@ -195,7 +195,7 @@ class AttendanceController  {
         order: [
           ['timestamp', 'DESC']
         ],
-        attributes : ["id","type", "status","day", "date", "time", "timestamp", "geolocation", "ipAddress", "employeeId", 'shiftId'],
+        attributes : ["id","type", "status","day", "date", "time", "timestamp", "attendance_desc", "geolocation", "ipAddress", "employeeId", 'shiftId'],
         include: [
           {
             model : Employee,
@@ -234,7 +234,7 @@ class AttendanceController  {
         order: [
           ['timestamp', 'DESC']
         ],
-        attributes : ["id","type", "status", "day", "date", "time", "timestamp", "geolocation", "ipAddress", "employeeId", 'shiftId'],
+        attributes : ["id","type", "status", "day", "date", "time", "timestamp", "attendance_desc", "geolocation", "ipAddress", "employeeId", 'shiftId'],
         include: [
           {
             model : Employee,
