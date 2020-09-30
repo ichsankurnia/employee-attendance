@@ -27,8 +27,8 @@ class AttendanceController  {
         employeeId: req.body.employee_id,
         type: req.body.type,
         status: req.body.status,
-        geolocation: req.body.geolocation,
-        ipAddress: req.body.ipAddress,
+        latitude: req.body.latitude,
+        longitude: req.body.longitude,
         day: moment(dateNow).format("dddd"),
         date: moment(dateNow).format("DD-MMM-YYYY"),
         time: moment(dateNow).format("hh:mm:ss A"),
@@ -129,7 +129,7 @@ class AttendanceController  {
         order: [
           ['timestamp', 'DESC']
         ],
-        attributes : ["id","type", "status", "day", "date", "time", "timestamp", "attendance_desc", "geolocation", "ipAddress", "employeeId"],
+        attributes : ["id","type", "status", "day", "date", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId"],
         include: [
           {
             model : Employee,
@@ -195,7 +195,7 @@ class AttendanceController  {
         order: [
           ['timestamp', 'DESC']
         ],
-        attributes : ["id","type", "status","day", "date", "time", "timestamp", "attendance_desc", "geolocation", "ipAddress", "employeeId", 'shiftId'],
+        attributes : ["id","type", "status","day", "date", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId'],
         include: [
           {
             model : Employee,
@@ -234,7 +234,7 @@ class AttendanceController  {
         order: [
           ['timestamp', 'DESC']
         ],
-        attributes : ["id","type", "status", "day", "date", "time", "timestamp", "attendance_desc", "geolocation", "ipAddress", "employeeId", 'shiftId'],
+        attributes : ["id","type", "status", "day", "date", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId'],
         include: [
           {
             model : Employee,
