@@ -1,5 +1,6 @@
 const { Attendance, Shift, Employee, Schedule } = require('../models');
-const moment = require('moment')
+const moment = require('moment');
+const { Op } = require('sequelize');
 
 
 function getTIme(date) {
@@ -20,8 +21,6 @@ const getAMorPM = (date) => {
 class AttendanceController  {
   static async addAttendance(req, res, next) {
     try {
-
-      const dateNow = new Date()
       
       const input = {
         employeeId: req.body.employee_id,
@@ -29,10 +28,10 @@ class AttendanceController  {
         status: req.body.status,
         latitude: req.body.latitude,
         longitude: req.body.longitude,
-        day: moment(dateNow).format("dddd"),
-        date: moment(dateNow).format("DD-MMM-YYYY"),
-        time: moment(dateNow).format("hh:mm:ss A"),
-        timestamp: dateNow.getTime()
+        day: moment(new Date()).format("dddd"),
+        date: moment(new Date()).format("DD-MMM-YYYY"),
+        time: moment(new Date()).format("hh:mm:ss A"),
+        timestamp: new Date().getTime()
       }
 
       const employeeShift = await Schedule.findOne({
@@ -50,7 +49,7 @@ class AttendanceController  {
         if(dataShift){
           input.shiftId = employeeShift.dataValues.shiftId
   
-          const currTime = moment(getTIme(dateNow), "HH:mm A")
+          const currTime = moment(getTIme(new Date()), "HH:mm A")
           const minCheckIn = moment(dataShift.dataValues.min_check_in, "HH:mm A")
           const maxCheckIn = moment(dataShift.dataValues.max_check_in, "HH:mm A")
           const minCheckOut = moment(dataShift.dataValues.min_check_out, "HH:mm A")
@@ -59,7 +58,7 @@ class AttendanceController  {
           if(input.status.toLowerCase() === "check_in" || input.status.toLowerCase() === "check in" || input.status.toLowerCase() === "check-in"){
             if(minCheckIn.isAfter(maxCheckIn)){
               maxCheckIn.add(1, 'days')
-              if(getAMorPM(getTIme(dateNow)).toLowerCase() === "am"){
+              if(getAMorPM(getTIme(new Date())).toLowerCase() === "am"){
                   if(currTime.isBefore(minCheckIn) && currTime.isBefore(maxCheckIn)){
                       currTime.add(1, 'days')
                   }
@@ -68,7 +67,7 @@ class AttendanceController  {
           }else{
             if(minCheckOut.isAfter(maxCheckOut)){
               maxCheckOut.add(1, 'days')
-              if(getAMorPM(getTIme(dateNow)).toLowerCase() === "am"){
+              if(getAMorPM(getTIme(new Date())).toLowerCase() === "am"){
                   if(currTime.isBefore(minCheckOut) && currTime.isBefore(maxCheckOut)){
                       currTime.add(1, 'days')
                   }
@@ -134,14 +133,12 @@ class AttendanceController  {
         {
           model : Employee,
           as: "employees",
-          attributes : ["nik", "name", "position", "username", "shiftId"],
-          include: [
-            {
-              model : Shift,
-              as: "shifts",
-              attributes : ["shift_name", "shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
-            },
-          ]
+          attributes : ["nik", "name", "position", "username"],
+        },
+        {
+          model : Shift,
+          as: "shifts",
+          attributes : ["shift_name", "shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
         },
       ]
 
@@ -219,7 +216,7 @@ class AttendanceController  {
 
       paramQuerySQL.where = {
         time: {
-          [Op.substring]: moment(dateNow).format("DD-MM-YYYY")
+          [Op.substring]: moment(new Date()).format("DD-MM-YYYY")
         }
       }
 
@@ -229,14 +226,12 @@ class AttendanceController  {
         {
           model : Employee,
           as: "employees",
-          attributes : ["nik", "name", "position", "username", "shiftId"],
-          include: [
-            {
-              model : Shift,
-              as: "shifts",
-              attributes : ["shift_name", "shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
-            },
-          ]
+          attributes : ["nik", "name", "position", "username"],
+        },
+        {
+          model : Shift,
+          as: "shifts",
+          attributes : ["shift_name", "shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
         },
       ]
 
@@ -292,7 +287,7 @@ class AttendanceController  {
 
       paramQuerySQL.where = {
         time: {
-          [Op.substring]: moment(dateNow).format("DD-MM-YYYY")
+          [Op.substring]: moment(new Date()).format("DD-MM-YYYY")
         }
       }
 
@@ -302,14 +297,12 @@ class AttendanceController  {
         {
           model : Employee,
           as: "employees",
-          attributes : ["nik", "name", "position", "username", "shiftId"],
-          include: [
-            {
-              model : Shift,
-              as: "shifts",
-              attributes : ["shift_name", "shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
-            },
-          ]
+          attributes : ["nik", "name", "position", "username"],
+        },
+        {
+          model : Shift,
+          as: "shifts",
+          attributes : ["shift_name", "shift_desc", "min_check_in", "max_check_in", "min_check_out", "max_check_out"]
         },
       ]
 

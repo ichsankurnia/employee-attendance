@@ -19,9 +19,7 @@
     "url": "https://github.com/icecape/hris-express/issues"
   },
   "homepage": "https://github.com/icecape/hris-express#readme",
-  "devDependencies": {
-    "dotenv": "^8.2.0"
-  },
+  "devDependencies": {},
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
