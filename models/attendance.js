@@ -110,8 +110,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: new Date().getTime()
     },
-    geolocation: DataTypes.TEXT,
-    ipAddress: DataTypes.STRING,
+    latitude: DataTypes.STRING,
+    longitude: DataTypes.STRING,
     attendance_desc: DataTypes.STRING,
   }, {
     sequelize,
