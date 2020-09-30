@@ -127,7 +127,7 @@ class AttendanceController  {
       let { filter } = req.query;
       let paramQuerySQL = {};
 
-      paramQuerySQL.attributes = ["id","type", "status", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId",  'shiftId']
+      paramQuerySQL.attributes = ["id","type", "status", "time", "date", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId",  'shiftId']
 
       paramQuerySQL.include = [
         {
@@ -226,7 +226,7 @@ class AttendanceController  {
         date: moment(new Date()).format("DD-MMM-YYYY")
       }
 
-      paramQuerySQL.attributes = ["id","type", "status", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId']
+      paramQuerySQL.attributes = ["id","type", "status", "time", "date", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId']
 
       paramQuerySQL.include = [
         {
@@ -295,7 +295,7 @@ class AttendanceController  {
         date: date
       }
 
-      paramQuerySQL.attributes = ["id","type", "status", "time", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId']
+      paramQuerySQL.attributes = ["id","type", "status", "time", "date", "timestamp", "attendance_desc", "latitude", "longitude", "employeeId", 'shiftId']
 
       paramQuerySQL.include = [
         {
