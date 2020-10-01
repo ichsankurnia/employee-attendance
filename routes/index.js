@@ -14,7 +14,7 @@ router.get('/', (req,res) => {
 });
 
 router.post('/import-employee', upload.single('file'), importController.importEmployee);
-router.post('/import-shift', upload.single('file'), importController.importShift);
+router.post('/import-schedule', upload.single('file'), importController.importSchedule);
 
 router.use('/admins', adminRoutes);
 router.use('/employees', employeeRoutes);

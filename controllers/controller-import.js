@@ -1,6 +1,6 @@
 const fs = require('fs');
 const csv = require('csv');
-const { Shift } = require('../models');
+const { Schedule, Employee } = require('../models');
 
 class ImportController {
   static importEmployee(req, res, next) {
@@ -35,7 +35,7 @@ class ImportController {
     input.pipe(parser).pipe(transform);
   }
 
-  static importShift(req, res, next) {
+  static importSchedule(req, res, next) {
     const input = fs.createReadStream(req.file.path);
     const parser = csv.parse({
       delimiter: ',',
@@ -49,7 +49,7 @@ class ImportController {
         date: row.date,
         desc: row.desc,
       };
-      Shift.create(resultObj)
+      Schedule.create(resultObj)
         .then(function () {
           res.status(200).json({
             message: 'Shift data has been successfuly recorded',
